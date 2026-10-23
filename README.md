@@ -1,10 +1,9 @@
-# Full stack developer python Django assessment
+# Full stack developer Python Django assessment(BizTech Analytics)
 
 All three required sections are implemented. Section 1 reproduces and fixes a
 slow order summary. Section 2 adds a rate-limited Celery and Redis email queue.
 Section 3 answers the Django Admin Performance and Pagination Trade-offs
 questions.
-The original assessment document has not been edited.
 
 ## Submission overview
 
