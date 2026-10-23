@@ -1,0 +1,49 @@
+services:
+  redis:
+    image: redis:7.4-alpine
+    command: ["redis-server", "--appendonly", "yes", "--appendfsync", "always", "--maxmemory-policy", "noeviction"]
+    ports:
+      - "127.0.0.1:6379:6379"
+    volumes:
+      - redis-data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 2s
+      timeout: 2s
+      retries: 20
+  app:
+    build: .
+    environment: &environment
+      ASSESSMENT_DB_PATH: /data/assessment.sqlite3
+      CELERY_BROKER_URL: redis://redis:6379/0
+      CELERY_RESULT_BACKEND: redis://redis:6379/1
+      EMAIL_REDIS_URL: redis://redis:6379/2
+      DJANGO_SECRET_KEY: ${DJANGO_SECRET_KEY:?Set DJANGO_SECRET_KEY in your terminal before running compose}
+    volumes: &volumes
+      - app-data:/data
+    ports:
+      - "127.0.0.1:8000:8000"
+    depends_on:
+      redis:
+        condition: service_healthy
+  worker:
+    build: .
+    environment: *environment
+    volumes: *volumes
+    # One process keeps this SQLite demo easy to run. The Redis limit is shared
+    # across worker processes; the integration verifier also runs two workers.
+    command: ["celery", "-A", "config", "worker", "--loglevel=INFO", "--concurrency=1"]
+    depends_on:
+      redis:
+        condition: service_healthy
+  beat:
+    build: .
+    environment: *environment
+    volumes: *volumes
+    command: ["celery", "-A", "config", "beat", "--loglevel=INFO", "--schedule=/data/celerybeat-schedule"]
+    depends_on:
+      redis:
+        condition: service_healthy
+volumes:
+  redis-data:
+  app-data:

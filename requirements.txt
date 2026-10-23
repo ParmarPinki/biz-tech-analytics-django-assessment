@@ -1,0 +1,4 @@
+Django==5.2.18
+django-silk==5.6.0
+celery[redis]==5.6.3
+redis==6.4.0

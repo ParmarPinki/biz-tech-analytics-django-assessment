@@ -1,0 +1,9 @@
+.venv
+.git
+.runtime
+**/__pycache__
+*.sqlite3
+.local-secret-key
+.env
+.env.*
+staticfiles

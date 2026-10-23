@@ -1,0 +1,13 @@
+<!doctype html>
+<html lang="en">
+<head><meta charset="utf-8"><title>Assessment demo login</title></head>
+<body>
+  <h1>Assessment demo login</h1>
+  <form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <input type="hidden" name="next" value="{{ next }}">
+    <button type="submit">Log in</button>
+  </form>
+</body>
+</html>
