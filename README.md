@@ -1,4 +1,4 @@
-# Django developer assessment
+# Full stack developer python Django assessment
 
 All three required sections are implemented. Section 1 reproduces and fixes a
 slow order summary. Section 2 adds a rate-limited Celery and Redis email queue.
